@@ -1,9 +1,11 @@
-package stdogr.aoc
+package stdogr.aoc.day.one
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import stdogr.aoc.day.one.countNumberOfTimesValuesIncrease
+import stdogr.aoc.day.one.countNumberOfTimesValuesIncreaseWindowed
 
-class Day1Test {
+class FirstPartKtTest {
 
     @Test
     fun `count number of times values increase`() {
