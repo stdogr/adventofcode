@@ -30,7 +30,6 @@ class Day3FirstPartKtTest {
         Assertions.assertThat(result).isEqualTo(22)
     }
 
-
     @Test
     fun `find epsilon`() {
         // given
@@ -54,5 +53,30 @@ class Day3FirstPartKtTest {
 
         // then
         Assertions.assertThat(result).isEqualTo(9)
+    }
+
+    @Test
+    fun `find product of gamma and epsilon`() {
+        // given
+        val bits = listOf(
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        )
+
+        // when
+        val result = findProductOfGammaAndEpsilon(bits)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(198)
     }
 }

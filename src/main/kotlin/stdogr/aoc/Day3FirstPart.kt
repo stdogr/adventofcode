@@ -1,6 +1,19 @@
 package stdogr.aoc
 
+import stdogr.aoc.util.FileLoader
 import kotlin.math.pow
+
+fun main() {
+    val bits = FileLoader().loadLines("2021/day3.txt")
+    val result = findProductOfGammaAndEpsilon(bits)
+    println(result)
+}
+
+fun findProductOfGammaAndEpsilon(bits: List<String>): Int {
+    val gamma = findGamma(bits)
+    val epsilon = findEpsilon(bits)
+    return gamma * epsilon
+}
 
 fun findEpsilon(bits: List<String>): Int {
     return produceSequenceByMostCommonBit(bits) { zeroes, ones ->
