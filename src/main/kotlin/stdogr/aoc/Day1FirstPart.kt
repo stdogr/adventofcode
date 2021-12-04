@@ -1,11 +1,9 @@
-package stdogr.aoc.day.one
+package stdogr.aoc
 
 import stdogr.aoc.util.FileLoader
 
 fun main() {
-    val data = FileLoader().load("2021/day1.txt")
-    val values = data.lines()
-        .filter { it.isNotBlank() }
+    val values = FileLoader().loadLines("2021/day1.txt")
         .map { it.toInt() }
     val count = countNumberOfTimesValuesIncrease(values)
     println(count)

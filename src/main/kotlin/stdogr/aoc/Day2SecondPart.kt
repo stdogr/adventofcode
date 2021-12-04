@@ -3,8 +3,7 @@ package stdogr.aoc
 import stdogr.aoc.util.FileLoader
 
 fun main() {
-    val data = FileLoader().load("2021/day2.txt")
-    val commands = data.lines().filter { it.isNotBlank() }
+    val commands = FileLoader().loadLines("2021/day2.txt")
     val result = processCommandsWithAim(commands)
     println(result)
 }
