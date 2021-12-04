@@ -5,16 +5,7 @@ import kotlin.math.pow
 fun findEpsilon(bits: List<String>): Int {
     var result = ""
     for (index in 0 until 5) {
-        var zeroes = 0
-        var ones = 0
-        bits.forEach {
-            val bit = it[index]
-            if (bit == '0') {
-                zeroes += 1
-            } else if (bit == '1') {
-                ones += 1
-            }
-        }
+        val (zeroes, ones) = countBits(bits, index)
         if (zeroes < ones) {
             result += 0
         } else {
@@ -27,16 +18,7 @@ fun findEpsilon(bits: List<String>): Int {
 fun findGamma(bits: List<String>): Int {
     var result = ""
     for (index in 0 until 5) {
-        var zeroes = 0
-        var ones = 0
-        bits.forEach {
-            val bit = it[index]
-            if (bit == '0') {
-                zeroes += 1
-            } else if (bit == '1') {
-                ones += 1
-            }
-        }
+        val (zeroes, ones) = countBits(bits, index)
         if (zeroes > ones) {
             result += 0
         } else {
@@ -44,6 +26,20 @@ fun findGamma(bits: List<String>): Int {
         }
     }
     return convertToInt(result)
+}
+
+fun countBits(bits: List<String>, index: Int): Pair<Int, Int> {
+    var zeroes = 0
+    var ones = 0
+    bits.forEach {
+        val bit = it[index]
+        if (bit == '0') {
+            zeroes += 1
+        } else if (bit == '1') {
+            ones += 1
+        }
+    }
+    return zeroes to ones
 }
 
 private fun convertToInt(bits: String): Int {
