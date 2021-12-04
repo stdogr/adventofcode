@@ -1,5 +1,16 @@
 package stdogr.aoc.day.one
 
+import stdogr.aoc.util.FileLoader
+
+fun main() {
+    val data = FileLoader().load("2021/day1.txt")
+    val values = data.lines()
+        .filter { it.isNotBlank() }
+        .map { it.toInt() }
+    val count = countNumberOfTimesValuesIncreaseWindowed(values)
+    println(count)
+}
+
 fun countNumberOfTimesValuesIncreaseWindowed(values: List<Int>): Int {
     if (values.size < 4) return 0
     val windows = mutableListOf<Int>()
