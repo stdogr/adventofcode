@@ -1,23 +1,23 @@
 package stdogr.aoc
 
 fun main() {
-    Day1().checkInput()
+    Loader().countNumberOfTimeValuesIncrease()
 }
 
-class Day1 {
+class Loader {
 
-    fun checkInput() {
+    fun countNumberOfTimeValuesIncrease() {
         val data = this::javaClass.get().classLoader
             .getResource("day1.txt")!!.readText()
         val values = data.lines()
             .filter { it.isNotBlank() }
             .map { it.toInt() }
-        val count = countRisingNumbers(values)
+        val count = countNumberOfTimeValuesIncrease(values)
         println(count)
     }
 }
 
-fun countRisingNumbers(values: List<Int>): Int {
+fun countNumberOfTimeValuesIncrease(values: List<Int>): Int {
     if (values.isEmpty()) return 0
     var count = 0
     for (index in 1 until values.size) {

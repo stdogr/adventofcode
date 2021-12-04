@@ -13,7 +13,7 @@ class Day1Test {
         )
 
         // when
-        val count = countRisingNumbers(values)
+        val count = countNumberOfTimeValuesIncrease(values)
 
         // then
         Assertions.assertThat(count).isEqualTo(7)
