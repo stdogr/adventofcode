@@ -16,7 +16,7 @@ fun findGamma(bits: List<String>): Int {
 
 private fun produceSequenceByMostCommonBit(bits: List<String>, pickZeroOrOne: (Int, Int) -> Int): Int {
     var result = ""
-    for (index in 0 until 5) {
+    for (index in bits.first().indices) {
         var zeroes = 0
         var ones = 0
         bits.forEach {
