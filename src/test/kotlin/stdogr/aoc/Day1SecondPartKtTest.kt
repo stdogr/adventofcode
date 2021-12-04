@@ -1,10 +1,10 @@
-package stdogr.aoc.day.one
+package stdogr.aoc
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import stdogr.aoc.day.one.countNumberOfTimesValuesIncreaseWindowed
 
-class SecondPartKtTest {
+class Day1SecondPartKtTest {
 
     @Test
     fun `count number of times values increase windowed`() {
