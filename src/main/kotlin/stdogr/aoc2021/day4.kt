@@ -4,10 +4,10 @@ import stdogr.aoc2021.util.FileLoader
 
 fun main() {
     val data = FileLoader().load("2021/day4.txt")
-    val result1 = Bingo(data).play()
+    val result1 = Bingo(data).scoreFirstWinner()
     println("part 1: [$result1]")
 
-    val result2 = Bingo(data).play()
+    val result2 = Bingo(data).scoreFirstWinner()
     println("part 2: [$result2]")
 }
 
@@ -26,7 +26,7 @@ class Bingo(data: String) {
         boards = boardData.map { Board(it) }
     }
 
-    fun play(): Int {
+    fun scoreFirstWinner(): Int {
         draws.forEach { draw ->
             boards.forEach { board ->
                 if (board.call(draw)) {
