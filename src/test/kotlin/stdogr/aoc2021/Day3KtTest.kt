@@ -24,7 +24,9 @@ class Day3KtTest {
         )
 
         // when
-        val result = findGamma(bits)
+        val diagnosticReport = DiagnosticReport(bits)
+        val bitString = diagnosticReport.mostCommonBits()
+        val result = convertToInt(bitString)
 
         // then
         Assertions.assertThat(result).isEqualTo(22)
@@ -49,7 +51,9 @@ class Day3KtTest {
         )
 
         // when
-        val result = findEpsilon(bits)
+        val diagnosticReport = DiagnosticReport(bits)
+        val bitString = diagnosticReport.leastCommonBits()
+        val result = convertToInt(bitString)
 
         // then
         Assertions.assertThat(result).isEqualTo(9)

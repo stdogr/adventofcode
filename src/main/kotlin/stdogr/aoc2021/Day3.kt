@@ -10,42 +10,13 @@ fun main() {
 }
 
 fun findProductOfGammaAndEpsilon(bits: List<String>): Int {
-    val gamma = findGamma(bits)
-    val epsilon = findEpsilon(bits)
+    val diagnosticReport = DiagnosticReport(bits)
+    val gamma = convertToInt(diagnosticReport.mostCommonBits())
+    val epsilon = convertToInt(diagnosticReport.leastCommonBits())
     return gamma * epsilon
 }
 
-fun findEpsilon(bits: List<String>): Int {
-    return produceSequenceByMostCommonBit(bits) { zeroes, ones ->
-        if (zeroes < ones) 0 else 1
-    }
-}
-
-fun findGamma(bits: List<String>): Int {
-    return produceSequenceByMostCommonBit(bits) { zeroes, ones ->
-        if (zeroes > ones) 0 else 1
-    }
-}
-
-private fun produceSequenceByMostCommonBit(bits: List<String>, pickZeroOrOne: (Int, Int) -> Int): Int {
-    var result = ""
-    for (index in bits.first().indices) {
-        var zeroes = 0
-        var ones = 0
-        bits.forEach {
-            val bit = it[index]
-            if (bit == '0') {
-                zeroes += 1
-            } else if (bit == '1') {
-                ones += 1
-            }
-        }
-        result += pickZeroOrOne(zeroes, ones)
-    }
-    return convertToInt(result)
-}
-
-private fun convertToInt(bits: String): Int {
+fun convertToInt(bits: String): Int {
     var int = 0
     bits.reversed()
         .forEachIndexed { index, bit ->
@@ -54,4 +25,41 @@ private fun convertToInt(bits: String): Int {
             }
         }
     return int
+}
+
+data class DiagnosticReport(
+    val bits: List<String>
+) {
+
+    private val counters = initCounters()
+
+    private fun initCounters(): List<Int> {
+        require(bits.isNotEmpty())
+        val counters = (0 until bits.first().length)
+            .map { 0 }
+            .toMutableList()
+
+        bits.forEach { bitString ->
+            bitString.forEachIndexed { index, bit ->
+                when (bit) {
+                    '0' -> counters[index] = counters[index] - 1
+                    '1' -> counters[index] = counters[index] + 1
+                    else -> throw IllegalArgumentException("Malformed bit in: [$bitString]!")
+                }
+            }
+        }
+        return counters
+    }
+
+    fun mostCommonBits(): String {
+        return counters.map {
+            if (it > 0) 1 else 0
+        }.joinToString(separator = "")
+    }
+
+    fun leastCommonBits(): String {
+        return counters.map {
+            if (it < 0) 1 else 0
+        }.joinToString(separator = "")
+    }
 }
