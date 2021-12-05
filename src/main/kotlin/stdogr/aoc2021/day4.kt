@@ -1,5 +1,16 @@
 package stdogr.aoc2021
 
+import stdogr.aoc2021.util.FileLoader
+
+fun main() {
+    val data = FileLoader().load("2021/day4.txt")
+    val result1 = Bingo(data).play()
+    println("part 1: [$result1]")
+
+    val result2 = Bingo(data).play()
+    println("part 2: [$result2]")
+}
+
 class Bingo(data: String) {
 
     private val draws: List<Int>
