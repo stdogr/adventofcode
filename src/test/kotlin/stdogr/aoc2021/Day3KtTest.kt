@@ -24,8 +24,8 @@ class Day3KtTest {
         )
 
         // when
-        val diagnosticReport = DiagnosticReport(bits)
-        val bitString = diagnosticReport.mostCommonBits()
+        val gammaAndEpsilonDiagnostic = GammaAndEpsilonDiagnostic(bits)
+        val bitString = gammaAndEpsilonDiagnostic.findGamma()
         val result = convertToInt(bitString)
 
         // then
@@ -51,8 +51,8 @@ class Day3KtTest {
         )
 
         // when
-        val diagnosticReport = DiagnosticReport(bits)
-        val bitString = diagnosticReport.leastCommonBits()
+        val gammaAndEpsilonDiagnostic = GammaAndEpsilonDiagnostic(bits)
+        val bitString = gammaAndEpsilonDiagnostic.findEpsilon()
         val result = convertToInt(bitString)
 
         // then
@@ -82,5 +82,80 @@ class Day3KtTest {
 
         // then
         Assertions.assertThat(result).isEqualTo(198)
+    }
+
+    @Test
+    fun `find oxygen generator rating`() {
+        // given
+        val bits = listOf(
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        )
+
+        // when
+        val result = findOxygenGeneratorRating(bits)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(23)
+    }
+
+    @Test
+    fun `find oxygen scrubber rating`() {
+        // given
+        val bits = listOf(
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        )
+
+        // when
+        val result = findOxygenScrubberRating(bits)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(10)
+    }
+
+    @Test
+    fun `find life support rating`() {
+        // given
+        val bits = listOf(
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        )
+
+        // when
+        val result = findLifeSupportRating(bits)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(230)
     }
 }
