@@ -3,7 +3,7 @@ package stdogr.aoc2021
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
-class Day1FirstPartKtTest {
+class Day1KtTest {
 
     @Test
     fun `count number of times values increase`() {
