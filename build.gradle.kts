@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.6.0"
 }
 
-group = "stdogr.aoc"
+group = "stdogr"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 

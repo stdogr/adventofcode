@@ -7,7 +7,7 @@ fun main() {
     val result1 = Bingo(data).scoreFirstWinner()
     println("part 1: [$result1]")
 
-    val result2 = Bingo(data).scoreFirstWinner()
+    val result2 = Bingo(data).scoreLastWinner()
     println("part 2: [$result2]")
 }
 
@@ -34,6 +34,23 @@ class Bingo(data: String) {
                 }
             }
         }
+        throw IllegalStateException("no winner")
+    }
+
+    fun scoreLastWinner(): Int {
+        draws.forEach { draw ->
+            boards.forEach { board ->
+                board.call(draw)
+            }
+        }
+        draws.reversed()
+            .forEach { draw ->
+                boards.forEach { board ->
+                    if (board.revertCall(draw)) {
+                        return board.score(draw)
+                    }
+                }
+            }
         throw IllegalStateException("no winner")
     }
 }
@@ -92,6 +109,31 @@ class Board(boardData: String) {
             .filterNot { it.called }
             .sumOf { it.number } * draw
     }
+
+    fun revertCall(draw: Int): Boolean {
+        data.forEach { rows ->
+            rows.forEach { cell ->
+                if (cell.revertCall(draw)) {
+                    if (checkDebingo()) {
+                        cell.call(draw)
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    private fun checkDebingo(): Boolean {
+        var bingo = false
+        for (rowIndex in 0..4) {
+            if (checkHorizontal(rowIndex)) bingo = true
+        }
+        for (cellIndex in 0..4) {
+            if (checkVertical(cellIndex)) bingo = true
+        }
+        return !bingo
+    }
 }
 
 class Cell(
@@ -105,6 +147,14 @@ class Cell(
     fun call(draw: Int): Boolean {
         if (draw == number) {
             called = true
+            return true
+        }
+        return false
+    }
+
+    fun revertCall(draw: Int): Boolean {
+        if (draw == number) {
+            called = false
             return true
         }
         return false
