@@ -5,10 +5,10 @@ import stdogr.aoc2021.util.FileLoader
 fun main() {
     val commands = FileLoader().loadLines("2021/day2.txt")
     val resultPart1 = processCommands(commands)
-    println("day 2 part 1: [$resultPart1]")
+    println("part 1: [$resultPart1]")
 
     val resultPart2 = processCommandsWithAim(commands)
-    println("day 2 part 2: [$resultPart2]")
+    println("part 2: [$resultPart2]")
 }
 
 fun processCommands(commands: List<String>): Int {

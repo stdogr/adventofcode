@@ -5,8 +5,8 @@ import kotlin.math.pow
 
 fun main() {
     val bits = FileLoader().loadLines("2021/day3.txt")
-    val result = findProductOfGammaAndEpsilon(bits)
-    println(result)
+    val resultPart1 = findProductOfGammaAndEpsilon(bits)
+    println("part 1: [$resultPart1]")
 }
 
 fun findProductOfGammaAndEpsilon(bits: List<String>): Int {

@@ -6,10 +6,10 @@ fun main() {
     val values = FileLoader().loadLines("2021/day1.txt")
         .map { it.toInt() }
     val countPart1 = countNumberOfTimesValuesIncrease(values)
-    println("day 1 part 1: [$countPart1]")
+    println("part 1: [$countPart1]")
 
     val countPart2 = countNumberOfTimesValuesIncreaseWindowed(values)
-    println("day 1 part 2: [$countPart2]")
+    println("part 2: [$countPart2]")
 }
 
 fun countNumberOfTimesValuesIncrease(values: List<Int>): Int {
