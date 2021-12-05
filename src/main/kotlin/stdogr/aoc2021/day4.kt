@@ -76,24 +76,6 @@ class Board(boardData: String) {
                 data[rowIndex][4].called
     }
 
-    private fun checkDiagonal(): Boolean {
-        return if (
-            data[0][0].called &&
-            data[1][1].called &&
-            data[2][2].called &&
-            data[3][3].called &&
-            data[4][4].called
-        ) {
-            true
-        } else {
-            data[0][4].called &&
-                    data[1][3].called &&
-                    data[2][2].called &&
-                    data[3][1].called &&
-                    data[4][0].called
-        }
-    }
-
     fun score(draw: Int): Int {
         return data.flatten()
             .filterNot { it.called }
@@ -101,10 +83,13 @@ class Board(boardData: String) {
     }
 }
 
-data class Cell(
+class Cell(
     val number: Int,
-    var called: Boolean = false
+    called: Boolean = false
 ) {
+
+    var called = called
+        private set
 
     fun call(draw: Int): Boolean {
         if (draw == number) {
