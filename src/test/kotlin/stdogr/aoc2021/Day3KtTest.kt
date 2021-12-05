@@ -3,7 +3,7 @@ package stdogr.aoc2021
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
-class Day3FirstPartKtTest {
+class Day3KtTest {
 
     @Test
     fun `find gamma`() {
