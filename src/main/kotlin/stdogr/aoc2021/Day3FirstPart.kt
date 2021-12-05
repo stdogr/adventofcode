@@ -1,6 +1,6 @@
-package stdogr.aoc
+package stdogr.aoc2021
 
-import stdogr.aoc.util.FileLoader
+import stdogr.aoc2021.util.FileLoader
 import kotlin.math.pow
 
 fun main() {

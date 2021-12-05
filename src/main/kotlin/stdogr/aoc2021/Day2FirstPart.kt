@@ -1,6 +1,6 @@
-package stdogr.aoc
+package stdogr.aoc2021
 
-import stdogr.aoc.util.FileLoader
+import stdogr.aoc2021.util.FileLoader
 
 fun main() {
     val commands = FileLoader().loadLines("2021/day2.txt")

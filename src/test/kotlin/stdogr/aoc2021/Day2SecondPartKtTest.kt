@@ -1,4 +1,4 @@
-package stdogr.aoc
+package stdogr.aoc2021
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package stdogr.aoc.util
+package stdogr.aoc2021.util
 
 class FileLoader {
 
