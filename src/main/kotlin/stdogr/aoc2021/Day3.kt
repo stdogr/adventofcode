@@ -1,10 +1,10 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.FileLoader
+import stdogr.aoc2021.util.loadResourceLines
 import kotlin.math.pow
 
 fun main() {
-    val bits = FileLoader().loadLines("2021/day3.txt")
+    val bits = loadResourceLines("2021/day3.txt")
     val resultPart1 = findProductOfGammaAndEpsilon(bits)
     println("part 1: [$resultPart1]")
 

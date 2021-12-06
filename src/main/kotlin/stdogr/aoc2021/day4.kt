@@ -1,9 +1,9 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.FileLoader
+import stdogr.aoc2021.util.loadResource
 
 fun main() {
-    val data = FileLoader().load("2021/day4.txt")
+    val data = loadResource("2021/day4.txt")
     val result1 = Bingo(data).scoreFirstWinner()
     println("part 1: [$result1]")
 

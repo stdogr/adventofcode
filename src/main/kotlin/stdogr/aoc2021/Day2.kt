@@ -1,9 +1,9 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.FileLoader
+import stdogr.aoc2021.util.loadResourceLines
 
 fun main() {
-    val commands = FileLoader().loadLines("2021/day2.txt")
+    val commands = loadResourceLines("2021/day2.txt")
     val resultPart1 = processCommands(commands)
     println("part 1: [$resultPart1]")
 

@@ -1,9 +1,9 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.FileLoader
+import stdogr.aoc2021.util.loadResourceLines
 
 fun main() {
-    val values = FileLoader().loadLines("2021/day1.txt")
+    val values = loadResourceLines("2021/day1.txt")
         .map { it.toInt() }
     val countPart1 = countNumberOfTimesValuesIncrease(values)
     println("part 1: [$countPart1]")
