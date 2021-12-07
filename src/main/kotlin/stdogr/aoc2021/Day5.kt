@@ -14,44 +14,30 @@ fun main() {
 }
 
 fun findDangerousVents(lines: List<String>): Int {
-    val points = mutableMapOf<Pair<Int, Int>, Int>()
+    val points = createPoints(lines)
+        .filterNot { (start, end) -> start.first != end.first && start.second != end.second }
 
-    lines.filterNot { it.isBlank() }.forEach { line ->
-        val pointData = line.split("->").map { it.trim() }
-        val start = createPoint(pointData.first())
-        val end = createPoint(pointData.last())
-        if (start.first == end.first) {
-            range(start.second, end.second).forEach { y ->
-                val newPoint = start.first to y
-                if (points.containsKey(newPoint)) {
-                    points[newPoint] = points[newPoint]!! + 1
-                } else {
-                    points[newPoint] = 1
-                }
-            }
-        } else if (start.second == end.second) {
-            range(start.first, end.first).forEach { x ->
-                val newPoint = x to end.second
-                if (points.containsKey(newPoint)) {
-                    points[newPoint] = points[newPoint]!! + 1
-                } else {
-                    points[newPoint] = 1
-                }
-            }
-        }
-    }
-
-    return points.count { it.value > 1 }
+    return processPoints(points)
 }
 
 fun findDangerousVentsWithDiagonals(lines: List<String>): Int {
-    val points = mutableMapOf<Pair<Int, Int>, Int>()
+    val points = createPoints(lines)
 
-    lines.filterNot { it.isBlank() }.forEach { line ->
+    return processPoints(points)
+}
+
+private fun createPoints(lines: List<String>) = lines.filterNot { it.isBlank() }
+    .map { line ->
         val pointData = line.split("->").map { it.trim() }
         val start = createPoint(pointData.first())
         val end = createPoint(pointData.last())
+        start to end
+    }
 
+private fun processPoints(points: List<Pair<Pair<Int, Int>, Pair<Int, Int>>>): Int {
+    val pointsAndHits = mutableMapOf<Pair<Int, Int>, Int>()
+
+    points.forEach { (start, end) ->
         var currentX = start.first
         var currentY = start.second
         var diff = max(
@@ -60,10 +46,10 @@ fun findDangerousVentsWithDiagonals(lines: List<String>): Int {
         )
         while (diff >= 0) {
             val newPoint = currentX to currentY
-            if (points.containsKey(newPoint)) {
-                points[newPoint] = points[newPoint]!! + 1
+            if (pointsAndHits.containsKey(newPoint)) {
+                pointsAndHits[newPoint] = pointsAndHits[newPoint]!! + 1
             } else {
-                points[newPoint] = 1
+                pointsAndHits[newPoint] = 1
             }
 
             currentX = if (currentX < end.first) currentX + 1
@@ -78,13 +64,7 @@ fun findDangerousVentsWithDiagonals(lines: List<String>): Int {
         }
     }
 
-    return points.count { it.value > 1 }
-}
-
-private fun range(first: Int, second: Int): IntRange {
-    return if (first > second) {
-        second..first
-    } else first..second
+    return pointsAndHits.count { it.value > 1 }
 }
 
 private fun createPoint(data: String): Pair<Int, Int> {
