@@ -24,8 +24,7 @@ fun lanternFish(data: String, days: Int): Long {
     initial.forEach { fish[it] = fish[it] + 1 }
 
     repeat(days) {
-        val zero = fish[0]
-        var current = zero
+        var current = fish[0]
         (0..8)
             .reversed()
             .forEach { index ->
