@@ -19,14 +19,8 @@ fun fuelCrabs(data: String, costFunction: (Int) -> Int): Int {
         .sorted()
 
     val max = crabs.maxOf { it }
-    val costs = (0..max).map { 0 }
-        .toMutableList()
-
-    costs.forEachIndexed { index, _ ->
-        val (below, sameOrAbove) = crabs.partition { it < index }
-        val cost = below.sumOf { costFunction(index - it) } + sameOrAbove.sumOf { costFunction(it - index) }
-        costs[index] = cost
-    }
-
-    return costs.minOf { it }
+    return (0..max).map { newPosition ->
+        val (below, sameOrAbove) = crabs.partition { it < newPosition }
+        below.sumOf { costFunction(newPosition - it) } + sameOrAbove.sumOf { costFunction(it - newPosition) }
+    }.minOf { it }
 }
