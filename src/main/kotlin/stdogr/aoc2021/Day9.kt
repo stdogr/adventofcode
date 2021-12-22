@@ -7,7 +7,7 @@ fun main() {
     val resultPart1 = sumRiskLevels(data)
     println("part 1: [$resultPart1]")
 
-    val resultPart2 = sumRiskLevels(data)
+    val resultPart2 = multiplyThreeLargestBasins(data)
     println("part 2: [$resultPart2]")
 }
 
@@ -20,7 +20,7 @@ fun sumRiskLevels(data: String): Int {
 
     heightMap.forEachIndexed { y, row ->
         row.forEachIndexed { x, value ->
-            if (isLowPoint(value, x, row.size, y, heightMap)) {
+            if (isLowPoint(Point(x, y, value), row.size, heightMap)) {
                 lowPoints.add(value)
             }
         }
@@ -29,59 +29,73 @@ fun sumRiskLevels(data: String): Int {
     return lowPoints.sumOf { it + 1 }
 }
 
-fun sumThreeLargestBasins(data: String): Int {
+fun multiplyThreeLargestBasins(data: String): Int {
     val heightMap: List<List<Int>> = data.lines()
         .filterNot { it.isBlank() }
         .map { line -> line.toCharArray().map { value -> "$value".toInt() } }
 
-    val lowPoints = mutableListOf<Int>()
+    val basins = mutableListOf<List<Point>>()
 
     heightMap.forEachIndexed { y, row ->
         row.forEachIndexed { x, value ->
-            if (isLowPoint(value, x, row.size, y, heightMap)) {
-                initBasin(y, x, row.size - 1, heightMap)
+            val currentPoint = Point(x, y, value)
+            if (isLowPoint(Point(x, y, value), row.size, heightMap)) {
+                val basin = fillBasin(currentPoint, row.size - 1, heightMap)
+                basins.add(basin)
             }
         }
     }
 
-    return lowPoints.sumOf { it + 1 }
+    val basinSizes = basins.map { it.size }.sorted()
+
+    return basinSizes[basinSizes.size - 1] * basinSizes[basinSizes.size - 2] * basinSizes[basinSizes.size - 3]
 }
 
-private fun isLowPoint(value: Int, x: Int, rowSize: Int, y: Int, heightMap: List<List<Int>>): Boolean {
-    return neighborValues(x, rowSize - 1, y, heightMap.size - 1, heightMap)
-        .find { it <= value } == null
+private fun isLowPoint(point: Point, rowSize: Int, heightMap: List<List<Int>>): Boolean {
+    return neighbors(point, rowSize - 1, heightMap.size - 1, heightMap)
+        .find { it.value <= point.value } == null
 }
 
-fun initBasin(y: Int, x: Int, maxX: Int, heightMap: List<List<Int>>) {
+private fun fillBasin(
+    lowPoint: Point,
+    maxX: Int,
+    heightMap: List<List<Int>>
+): List<Point> {
     val basin = mutableListOf<Point>()
-    basin.add(Point(x, y))
+    basin.add(lowPoint)
 
-    for (point in basin) {
-        neighbors(point.x, maxX, point.y, heightMap.size - 1)
+    var index = 0
+    while (index < basin.size) {
+        val current = basin[index]
+        neighbors(current, maxX, heightMap.size - 1, heightMap)
+            .filter {
+                val neighborValue = heightMap[it.y][it.x]
+                neighborValue != 9 && neighborValue > heightMap[current.y][current.x]
+            }.forEach {
+                if (!basin.contains(it)) basin.add(it)
+            }
+        index++
     }
+    return basin
 }
 
-private fun neighbors(x: Int, maxX: Int, y: Int, maxY: Int): List<Point> {
+private fun neighbors(point: Point, maxX: Int, maxY: Int, heightMap: List<List<Int>>): List<Point> {
     val neighbors = mutableListOf<Point>()
-    val left = x - 1
-    val right = x + 1
-    val up = y - 1
-    val down = y + 1
+    val left = point.x - 1
+    val right = point.x + 1
+    val up = point.y - 1
+    val down = point.y + 1
 
-    if (left >= 0) neighbors.add(Point(left, y))
-    if (right <= maxX) neighbors.add(Point(right, y))
-    if (up >= 0) neighbors.add(Point(x, up))
-    if (down <= maxY) neighbors.add(Point(x, down))
+    if (left >= 0) neighbors.add(Point(left, point.y, heightMap[point.y][left]))
+    if (right <= maxX) neighbors.add(Point(right, point.y, heightMap[point.y][right]))
+    if (up >= 0) neighbors.add(Point(point.x, up, heightMap[up][point.x]))
+    if (down <= maxY) neighbors.add(Point(point.x, down, heightMap[down][point.x]))
 
     return neighbors
 }
 
-private fun neighborValues(x: Int, maxX: Int, y: Int, maxY: Int, heightMap: List<List<Int>>): List<Int> {
-    return neighbors(x, maxX, y, maxY)
-        .map { heightMap[it.y][it.x] }
-}
-
 data class Point(
     val x: Int,
-    val y: Int
+    val y: Int,
+    val value: Int
 )

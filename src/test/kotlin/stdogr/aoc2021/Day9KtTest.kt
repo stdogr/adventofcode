@@ -55,4 +55,21 @@ class Day9KtTest {
         // then
         Assertions.assertThat(result).isEqualTo(15)
     }
+
+    @Test
+    fun `multiply three largest basins`() {
+        // given
+        val data = """2199943210
+3987894921
+9856789892
+8767896789
+9899965678
+"""
+
+        // when
+        val result = multiplyThreeLargestBasins(data)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(1134)
+    }
 }
