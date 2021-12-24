@@ -7,25 +7,22 @@ fun main() {
     val resultPart1 = countPaths(data)
     println("part 1: [$resultPart1]")
 
-    val resultPart2 = countPaths(data)
+    val resultPart2 = countPaths(data, true)
     println("part 2: [$resultPart2]")
 }
 
-fun countPaths(data: String): Int {
+fun countPaths(data: String, joker: Boolean = false): Int {
     val nodes = parse(data)
+    val start = nodes.find { it.start }!!
 
-    return expand(nodes)
-        .filter { it.isValid() }
-        .size
+    return expand(start, joker).size
 }
 
-private fun expand(nodes: Map<String, Node>): Set<Path> {
-    val first = nodes.values.find { it.start }!!
-
-    var paths = setOf(Path(first))
+private fun expand(start: Node, joker: Boolean = false): Set<Path> {
+    var paths = setOf(Path(start))
     while (true) {
         val newPaths = paths.flatMap {
-            val newPaths = it.expand(nodes)
+            val newPaths = it.expand(joker)
             newPaths
         }.toSet()
 
@@ -36,7 +33,7 @@ private fun expand(nodes: Map<String, Node>): Set<Path> {
     }
 }
 
-private fun parse(data: String): Map<String, Node> {
+private fun parse(data: String): Collection<Node> {
     val edges = data.lines()
         .filterNot { it.isBlank() }
         .map { line ->
@@ -44,61 +41,66 @@ private fun parse(data: String): Map<String, Node> {
             edge.first() to edge.last()
         }
 
-    val nodes = mutableMapOf<String, Node>()
+    val nameMapping = mutableMapOf<String, MutableList<String>>()
 
     edges.forEach { (firstName, secondName) ->
-        val first = Node(firstName)
-        val second = Node(secondName)
-
-        if (!nodes.containsKey(first.name)) {
-            nodes[first.name] = first
+        if (!nameMapping.containsKey(firstName)) {
+            nameMapping[firstName] = mutableListOf()
         }
-        nodes[first.name]!!.add(second.name)
+        nameMapping[firstName]!!.add(secondName)
 
-        if (!nodes.containsKey(second.name)) {
-            nodes[second.name] = second
+        if (!nameMapping.containsKey(secondName)) {
+            nameMapping[secondName] = mutableListOf()
         }
-        nodes[second.name]!!.add(first.name)
+        nameMapping[secondName]!!.add(firstName)
     }
 
-    return nodes
+    val nodes: Map<String, Node> = nameMapping.keys.associateWith { Node(it) }
+    nameMapping.forEach { nodeName, links ->
+        links.forEach { linkName ->
+            nodes[nodeName]!!.link(nodes[linkName]!!)
+        }
+    }
+
+    return nodes.values
 }
 
 class Path {
 
     private val nodes: List<Node>
-    private var joker = false
+    private val usedJoker: Boolean
 
     constructor(start: Node) {
         this.nodes = listOf(start)
+        this.usedJoker = false
     }
 
-    constructor(nodes: List<Node>) {
+    constructor(nodes: List<Node>, usedJoker: Boolean) {
         this.nodes = nodes
+        this.usedJoker = usedJoker
     }
 
-    fun expand(nodes: Map<String, Node>): Set<Path> {
+    fun expand(joker: Boolean = false): Set<Path> {
         val last = this.nodes.last()
         if (last.end) {
             return setOf(this)
         }
-        val targetNodes = last.targetNodes(nodes)
-        val newPaths = targetNodes.mapNotNull { newNode ->
-            if (!this.nodes.contains(newNode) || newNode.multipleVisitsAllowed) {
+        val linkedNodes = last.linkedNodes()
+        val newPaths = linkedNodes.mapNotNull { newNode ->
+            if (newNode.start) {
+                null
+            } else if (!this.nodes.contains(newNode) || newNode.multipleVisitsAllowed) {
                 val path = listOf(*this.nodes.toTypedArray(), newNode)
-                Path(path)
+                Path(path, usedJoker)
+            } else if (joker && !usedJoker) {
+                val path = listOf(*this.nodes.toTypedArray(), newNode)
+                Path(path, true)
             } else {
                 null
             }
         }
         return newPaths.toSet()
     }
-
-    fun isValid(): Boolean {
-        return nodes.first().start && nodes.last().end
-    }
-
-    override fun toString() = "Path:$nodes"
 }
 
 data class Node(val name: String) {
@@ -107,13 +109,16 @@ data class Node(val name: String) {
     val end = name == "end"
     val multipleVisitsAllowed = name.uppercase() == name
 
-    private val targetNodeNames = mutableSetOf<String>()
+    private val linkedNodes = mutableSetOf<Node>()
 
-    fun targetNodes(nodeNames: Map<String, Node>) = targetNodeNames.map { nodeNames[it]!! }
+    fun linkedNodes() = linkedNodes.toSet()
 
-    fun add(name: String) {
-        targetNodeNames.add(name)
+    fun link(other: Node) {
+        other.addNode(this)
+        this.addNode(other)
     }
 
-    override fun toString() = name
+    private fun addNode(node: Node) {
+        linkedNodes.add(node)
+    }
 }

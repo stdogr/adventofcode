@@ -25,7 +25,7 @@ b-end
     }
 
     @Test
-    fun `count paths medium example`() {
+    fun `count paths slightly larger example`() {
         // given
         val data = """dc-end
 HN-start
@@ -74,5 +74,76 @@ start-RW
 
         // then
         Assertions.assertThat(result).isEqualTo(226)
+    }
+
+    @Test
+    fun `count paths small example with joker`() {
+        // given
+        val data = """start-A
+start-b
+A-c
+A-b
+b-d
+A-end
+b-end
+"""
+
+        // when
+        val result = countPaths(data, true)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(36)
+    }
+
+    @Test
+    fun `count paths slightly larger example with joker`() {
+        // given
+        val data = """dc-end
+HN-start
+start-kj
+dc-start
+dc-HN
+LN-dc
+HN-end
+kj-sa
+kj-HN
+kj-dc
+"""
+
+        // when
+        val result = countPaths(data, true)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(103)
+    }
+
+    @Test
+    fun `count paths large example with joker`() {
+        // given
+        val data = """fs-end
+he-DX
+fs-he
+start-DX
+pj-DX
+end-zg
+zg-sl
+zg-pj
+pj-he
+RW-he
+fs-DX
+pj-RW
+zg-RW
+start-pj
+he-WI
+zg-he
+pj-fs
+start-RW
+"""
+
+        // when
+        val result = countPaths(data, true)
+
+        // then
+        Assertions.assertThat(result).isEqualTo(3509)
     }
 }
