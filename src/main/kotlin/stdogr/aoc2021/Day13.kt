@@ -8,6 +8,12 @@ fun main() {
     println("part 1: [$resultPart1]")
 
     val resultPart2 = foldAll(data)
+    //..##.####..##..#..#..##..###..###..###.
+    //...#....#.#..#.#..#.#..#.#..#.#..#.#..#
+    //...#...#..#....#..#.#..#.#..#.#..#.###.
+    //...#..#...#.##.#..#.####.###..###..#..#
+    //#..#.#....#..#.#..#.#..#.#....#.#..#..#
+    //.##..####..###..##..#..#.#....#..#.###.
     println("part 2: [$resultPart2]")
 }
 
@@ -26,9 +32,21 @@ fun foldAll(data: String): Int {
         points = points.mapNotNull { it.fold(fold) }.toSet()
     }
 
+    val maxX = points.maxOf { it.x }
+    val maxY = points.maxOf { it.y }
 
+    val matrix = (0..maxY).map { yIndex ->
+        (0..maxX).map { xIndex ->
+            if (points.any { it.x == xIndex && it.y == yIndex }) {
+                "#"
+            } else "."
+        }
+    }
 
-    println()
+    matrix.forEach { row ->
+        row.forEach { print(it) }
+        println()
+    }
 
     return points.size
 }
