@@ -1,21 +1,10 @@
 package stdogr.aoc2022
 
-import stdogr.aoc2021.util.loadResource
 
-fun main() {
-    val input = loadResource("2022/day1.txt")
+class Day1 : Day<Int>("day1") {
 
-    val result1 = Day1().partOne(input)
-    println("part 1: [$result1]")
-
-    val result2 = Day1().partTwo(input)
-    println("part 2: [$result2]")
-}
-
-class Day1 {
-
-    fun partOne(values: String): Int {
-        val lines = values
+    override fun partOne(input: String): Int {
+        val lines = input
             .lines()
 
         val numbers = mutableListOf<Int>()
@@ -32,8 +21,8 @@ class Day1 {
         return numbers.maxOf { it }
     }
 
-    fun partTwo(values: String): Int {
-        val lines = values
+    override fun partTwo(input: String): Int {
+        val lines = input
             .lines()
 
         val numbers = mutableListOf<Int>()
