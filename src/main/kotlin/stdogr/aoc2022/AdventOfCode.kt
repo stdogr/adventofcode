@@ -6,16 +6,17 @@ fun main() {
     val days = listOf(
         Day1(),
         Day2(),
+        Day3(),
     )
 
     days.forEach {
-        val example = loadResource("2022/${it.day}_example.txt")
-        val input = loadResource("2022/${it.day}.txt")
+        val example = loadResource("2022/${it.filePrefix}_example.txt")
+        val input = loadResource("2022/${it.filePrefix}.txt")
 
-        println("${it.day} - example 1: [${it.partOne(example)}]")
-        println("${it.day} - part 1: [${it.partOne(input)}]")
+        println("${it.filePrefix} - example 1: [${it.partOne(example)}]")
+        println("${it.filePrefix} - part 1: [${it.partOne(input)}]")
 
-        println("${it.day} - example 2: [${it.partTwo(example)}]")
-        println("${it.day} - part 2: [${it.partTwo(input)}]")
+        println("${it.filePrefix} - example 2: [${it.partTwo(example)}]")
+        println("${it.filePrefix} - part 2: [${it.partTwo(input)}]")
     }
 }

@@ -1,7 +1,7 @@
 package stdogr.aoc2022
 
 abstract class Task<R>(
-    val day: String,
+    val filePrefix: String,
 ) {
 
     abstract fun partOne(input: String): R
