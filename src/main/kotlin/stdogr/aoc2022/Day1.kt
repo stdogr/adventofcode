@@ -1,7 +1,7 @@
 package stdogr.aoc2022
 
 
-class Day1 : Day<Int>("day1") {
+class Day1 : Task<Int>("1_count_calories") {
 
     override fun partOne(input: String): Int {
         val numbers = sum(input)

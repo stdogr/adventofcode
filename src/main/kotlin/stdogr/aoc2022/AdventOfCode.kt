@@ -9,7 +9,7 @@ fun main() {
     )
 
     days.forEach {
-        val example = loadResource("2022/${it.day}example.txt")
+        val example = loadResource("2022/${it.day}_example.txt")
         val input = loadResource("2022/${it.day}.txt")
 
         println("${it.day} - example 1: [${it.partOne(example)}]")

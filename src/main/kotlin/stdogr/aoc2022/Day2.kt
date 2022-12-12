@@ -1,6 +1,6 @@
 package stdogr.aoc2022
 
-class Day2 : Day<Int>("day2") {
+class Day2 : Task<Int>("2_rock_paper_scissors") {
 
     private val outcomeScore = mapOf(
         "A" to mapOf("X" to 3, "Y" to 6, "Z" to 0),

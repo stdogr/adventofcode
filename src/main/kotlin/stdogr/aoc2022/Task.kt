@@ -1,6 +1,6 @@
 package stdogr.aoc2022
 
-abstract class Day<R>(
+abstract class Task<R>(
     val day: String,
 ) {
 
