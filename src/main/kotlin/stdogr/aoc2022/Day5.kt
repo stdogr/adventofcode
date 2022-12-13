@@ -5,6 +5,46 @@ import java.util.*
 class Day5 : Task<String>("5_supply_stacks") {
 
     override fun partOne(input: String): String {
+        val (moves, stacks) = parseMovesAndStacks(input)
+
+        moves.forEach {
+            val from = stacks[it.from]!!
+            val to = stacks[it.to]!!
+            repeat(it.amount) {
+                val element = from.pop()
+                to.push(element)
+            }
+        }
+
+        return String(stacks.values
+            .mapNotNull { if (it.isNotEmpty()) it.pop() else null }
+            .toCharArray()
+        )
+    }
+
+    override fun partTwo(input: String): String {
+        val (moves, stacks) = parseMovesAndStacks(input)
+
+        moves.forEach { move ->
+            val from = stacks[move.from]!!
+            val to = stacks[move.to]!!
+            (1..move.amount)
+                .map {
+                    from.pop()
+                }
+                .reversed()
+                .forEach {
+                    to.push(it)
+                }
+        }
+
+        return String(stacks.values
+            .mapNotNull { if (it.isNotEmpty()) it.pop() else null }
+            .toCharArray()
+        )
+    }
+
+    private fun parseMovesAndStacks(input: String): Pair<List<Move>, Map<Int, Stack<Char>>> {
         val stackSetup = mutableMapOf<Int, MutableList<Char>>()
         val moves = mutableListOf<Move>()
         var initBlockOver = false
@@ -40,23 +80,7 @@ class Day5 : Task<String>("5_supply_stacks") {
                 stacks[stackNumber]!!.push(it)
             }
         }
-        moves.forEach {
-            val from = stacks[it.from]!!
-            val to = stacks[it.to]!!
-            (1..it.amount).forEach {
-                val element = from.pop()
-                to.push(element)
-            }
-        }
-
-        return String(stacks.values
-            .mapNotNull { if (it.isNotEmpty()) it.pop() else null }
-            .toCharArray()
-        )
-    }
-
-    override fun partTwo(input: String): String {
-        TODO("Not yet implemented")
+        return Pair(moves, stacks)
     }
 
     private data class Move(
