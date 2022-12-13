@@ -47,28 +47,24 @@ class Day5 : Task<String>("5_supply_stacks") {
     private fun parseMovesAndStacks(input: String): Pair<List<Move>, Map<Int, Stack<Char>>> {
         val stackSetup = mutableMapOf<Int, MutableList<Char>>()
         val moves = mutableListOf<Move>()
-        var initBlockOver = false
         input.lines()
+            .filterNot { it.startsWith(" 1") || it.isBlank() }
             .forEach { line ->
-                if (line.isBlank()) {
-                    initBlockOver = true
-                } else if (!line.startsWith(" 1")) {
-                    if (initBlockOver) {
-                        moves.add(Move(line))
-                    } else {
-                        line.toCharArray()
-                            .toList()
-                            .chunked(4)
-                            .forEachIndexed { index, chars ->
-                                if (!stackSetup.containsKey(index + 1)) {
-                                    stackSetup[index + 1] = mutableListOf()
-                                }
-                                val element = chars[1]
-                                if (element.isLetter()) {
-                                    stackSetup[index + 1]!!.add(element)
-                                }
+                if (line.startsWith("move")) {
+                    moves.add(Move(line))
+                } else {
+                    line.toCharArray()
+                        .toList()
+                        .chunked(4)
+                        .forEachIndexed { index, chars ->
+                            if (!stackSetup.containsKey(index + 1)) {
+                                stackSetup[index + 1] = mutableListOf()
                             }
-                    }
+                            val element = chars[1]
+                            if (element.isLetter()) {
+                                stackSetup[index + 1]!!.add(element)
+                            }
+                        }
                 }
             }
         val stacks = mutableMapOf<Int, Stack<Char>>()
