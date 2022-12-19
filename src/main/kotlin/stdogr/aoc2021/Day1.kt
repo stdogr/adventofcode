@@ -1,6 +1,6 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.loadResourceLines
+import stdogr.util.loadResourceLines
 
 fun main() {
     val values = loadResourceLines("2021/day1.txt")

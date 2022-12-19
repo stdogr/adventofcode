@@ -1,4 +1,4 @@
-package stdogr.aoc2021.util
+package stdogr.util
 
 import java.io.File
 

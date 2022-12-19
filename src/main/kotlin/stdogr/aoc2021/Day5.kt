@@ -1,6 +1,6 @@
 package stdogr.aoc2021
 
-import stdogr.aoc2021.util.loadResourceLines
+import stdogr.util.loadResourceLines
 import kotlin.math.abs
 import kotlin.math.max
 

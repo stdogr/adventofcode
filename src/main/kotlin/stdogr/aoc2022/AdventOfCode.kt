@@ -1,6 +1,6 @@
 package stdogr.aoc2022
 
-import stdogr.aoc2021.util.loadResource
+import stdogr.util.loadResource
 
 fun main() {
     val days = listOf(
