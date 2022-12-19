@@ -3,6 +3,16 @@ package stdogr.aoc2022
 class Day7 : Task<Long>("7_no_space_left_on_device") {
 
     override fun partOne(input: String): Long {
+        val nodes = nodes(input)
+
+        val relevantNodes = nodes.filter {
+            it.totalSize() <= 100000L
+        }
+
+        return relevantNodes.sumOf { it.totalSize() }
+    }
+
+    private fun nodes(input: String): MutableList<Node> {
         val cdRegex = "\\$ cd ([a-z]+)".toRegex()
         val dirRegex = "dir ([a-z]+)".toRegex()
         val fileRegex = "([0-9]+) ([a-z|\\.]+)".toRegex()
@@ -30,16 +40,19 @@ class Day7 : Task<Long>("7_no_space_left_on_device") {
                     current.addFile(fileName, fileSize)
                 }
             }
-
-        val relevantNodes = nodes.filter {
-            it.totalSize() <= 100000L
-        }
-
-       return relevantNodes.sumOf { it.totalSize() }
+        return nodes
     }
 
     override fun partTwo(input: String): Long {
-        TODO()
+        val nodes = nodes(input)
+
+        val totalSpace = 70000000L
+        val usedSpace = nodes.find { it is Root }!!.totalSize()
+        val freeSpace = totalSpace - usedSpace
+        val needToFree = 30000000L - freeSpace
+
+        return nodes.filter { it.totalSize() >= needToFree }
+            .minOf { it.totalSize() }
     }
 
     abstract class Node {
