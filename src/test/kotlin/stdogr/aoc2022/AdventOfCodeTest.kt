@@ -32,6 +32,7 @@ class AdventOfCodeTest {
                 Arguments.of(Day9(), 13, 1),
                 Arguments.of(Day10(), 13140, 0),
                 Arguments.of(Day11(), 10605L, 2713310158L),
+                Arguments.of(Day12(), 31, 31),
             )
         }
     }
