@@ -1,41 +1,58 @@
 package stdogr.aoc2022
 
 class Day12 : Task<Int>("12_hill_climbing") {
-
     override fun partOne(input: String): Int {
-        var start: Node? = null
-        val matrix = input.lines()
-            .mapIndexed { rowIndex, line ->
+        var id = 0
+
+        val nodes = input.lines()
+            .flatMapIndexed { rowIndex, line ->
                 line.mapIndexed { columnIndex, letter ->
-                    val node = Node(columnIndex, rowIndex, letter)
-                    if (node.start) start = node
-                    node
+                    LetterNode(columnIndex, rowIndex, letter, id++)
                 }
             }
 
-        matrix.forEach { row ->
-            row.forEach { currentNode ->
-                currentNode.addNeighbors(matrix)
+        val edges = nodes.flatMap { letterNode ->
+            val maxX = nodes.maxOf { it.x }
+            val maxY = nodes.maxOf { it.y }
+
+            listOfNotNull(
+                if (letterNode.x > 0) letterNode.x - 1 to letterNode.y else null,
+                if (letterNode.x < maxX) letterNode.x + 1 to letterNode.y else null,
+                if (letterNode.y > 0) letterNode.x to letterNode.y - 1 else null,
+                if (letterNode.y < maxY) letterNode.x to letterNode.y + 1 else null,
+            ).mapNotNull { (x, y) ->
+                val neighbor = nodes.find { it.y == y && it.x == x }!!
+                if (neighbor.score < letterNode.score ||
+                    neighbor.score == letterNode.score ||
+                    neighbor.score == letterNode.score + 1
+                ) {
+                    letterNode.id to neighbor.id
+                } else null
             }
         }
 
-        val paths = expand(start!!)
+        dijkstra(nodes, edges)
 
-        return paths.minOf { it.length() }
+        return nodes.find { it.letter == 'E' }!!.distance
     }
 
-    private fun expand(start: Node): Set<Path> {
-        var paths = setOf(Path(start))
-        while (true) {
-            val newPaths = paths.flatMap { path ->
-                val newPaths = path.expand(paths.filter { it.isComplete() }.minOfOrNull { it.length() })
-                newPaths
-            }.toSet()
+    private fun dijkstra(
+        nodes: List<LetterNode>,
+        edges: List<Pair<Int, Int>>
+    ) {
+        val unvisited = mutableListOf<LetterNode>()
+        unvisited.addAll(nodes)
 
-            if (newPaths == paths) {
-                return paths
-            }
-            paths = newPaths
+        while (unvisited.isNotEmpty()) {
+            val node = unvisited.minByOrNull { it.distance }!!
+            unvisited.remove(node)
+            edges.filter { it.first == node.id }
+                .forEach { (_, adjacentId) ->
+                    val adjacentNode = nodes.find { it.id == adjacentId }!!
+                    if (adjacentNode.distance > node.distance + 1) {
+                        adjacentNode.distance = node.distance + 1
+                    }
+                }
         }
     }
 
@@ -43,96 +60,23 @@ class Day12 : Task<Int>("12_hill_climbing") {
         TODO()
     }
 
-    class Path {
 
-        private val nodes: List<Node>
-
-        constructor(start: Node) {
-            this.nodes = listOf(start)
-        }
-
-        constructor(nodes: List<Node>) {
-            this.nodes = nodes
-        }
-
-        fun expand(shortestCompletePath: Int?): Set<Path> {
-            val last = nodes.last()
-            return if (last.end) {
-                setOf(this)
-            } else if (last.getNeighbors().isEmpty()) {
-                emptySet()
-            } else {
-                last.getNeighbors()
-                    .mapNotNull { neighbor ->
-                        if (this.nodes.contains(neighbor)) {
-                            null
-                        } else if (shortestCompletePath == null || length() < shortestCompletePath) {
-                            Path(listOf(*this.nodes.toTypedArray(), neighbor))
-                        } else null
-                    }.toSet()
-            }
-        }
-
-        fun length() = nodes.size - 1 // subtract start node from path length
-
-        fun isComplete() = nodes.last().end
-    }
-
-    data class Node(
+    data class LetterNode(
         val x: Int,
         val y: Int,
         val letter: Char,
+        val id: Int,
     ) {
-        val start = letter == 'S'
-        val end = letter == 'E'
 
-        private val score = calculateScore()
-
-        private val neighbors = mutableSetOf<Node>()
-
-        fun getNeighbors(): Set<Node> = neighbors
-
-        fun addNeighbors(matrix: List<List<Node>>) {
-            val maxX = matrix.first().size - 1
-            val maxY = matrix.size - 1
-
-            val left = if (x > 0) x - 1 to y else null
-            left?.let {
-                val neighbor = matrix[it.second][it.first]
-                addNeighbor(neighbor)
-            }
-            val right = if (x < maxX) x + 1 to y else null
-            right?.let {
-                val neighbor = matrix[it.second][it.first]
-                addNeighbor(neighbor)
-            }
-            val up = if (y > 0) x to y - 1 else null
-            up?.let {
-                val neighbor = matrix[it.second][it.first]
-                addNeighbor(neighbor)
-            }
-            val down = if (y < maxY) x to y + 1 else null
-            down?.let {
-                val neighbor = matrix[it.second][it.first]
-                addNeighbor(neighbor)
-            }
-        }
-
-        private fun addNeighbor(neighbor: Node) {
-            if (neighbor.score < this.score ||
-                neighbor.score == this.score ||
-                neighbor.score == this.score + 1
-            ) {
-                neighbors.add(neighbor)
-            }
-        }
+        val score: Int = calculateScore()
+        var distance = if (letter == 'S') 0 else Int.MAX_VALUE
 
         private fun calculateScore(): Int {
-            return if (start) {
-                1
-            } else if (end) {
-                26
-            } else heights[letter]!!
+            return when (letter) {
+                'S' -> 1
+                'E' -> 26
+                else -> heights[letter]!!
+            }
         }
 
         companion object {
@@ -145,4 +89,5 @@ class Day12 : Task<Int>("12_hill_climbing") {
                 .toMap()
         }
     }
+
 }
